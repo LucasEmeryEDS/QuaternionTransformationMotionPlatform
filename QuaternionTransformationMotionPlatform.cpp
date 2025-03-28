@@ -13,6 +13,7 @@
 #include <cmath>
 #include <vector>
 #include <string>
+#include <iomanip> // Add this for precision control
 
  // Define M_PI if not already defined
 #ifndef M_PI
@@ -393,6 +394,9 @@ void printActuatorInfo(const Platform& platform) {
     double height, pitch, roll;
     platform.getCurrentState(height, pitch, roll);
 
+    // Set precision for floating point output
+    std::cout << std::fixed << std::setprecision(6);
+
     // Print platform state
     std::cout << "Platform State:" << std::endl;
     std::cout << "  Height: " << height << " inches" << std::endl;
@@ -428,6 +432,9 @@ int main() {
     // Maximum angles
     double maxPitchDegrees = 3.18;    // Maximum pitch in degrees
     double maxRollDegrees = 5.47;     // Maximum roll in degrees
+
+    // Set global output precision
+    std::cout << std::fixed << std::setprecision(6);
 
     // Create the platform
     Platform platform(width, length, neutralHeight, minActuatorLength, maxActuatorLength,
