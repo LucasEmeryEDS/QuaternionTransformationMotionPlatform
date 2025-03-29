@@ -395,7 +395,7 @@ void printActuatorInfo(const Platform& platform) {
     platform.getCurrentState(height, pitch, roll);
 
     // Set precision for floating point output
-    std::cout << std::fixed << std::setprecision(6);
+    std::cout << std::fixed << std::setprecision(10);
 
     // Print platform state
     std::cout << "Platform State:" << std::endl;
@@ -404,7 +404,7 @@ void printActuatorInfo(const Platform& platform) {
     std::cout << "  Roll:   " << roll << " degrees" << std::endl;
 
     // Print actuator information
-    std::cout << "Actuator Lengths:" << std::endl;
+    std::cout << "Actuator Lengths, 'stroke' represents the distance from neutral position, 1 inch:" << std::endl;
     std::cout << "  Rear Left (0):  " << lengths[0] << " inches (stroke: " << strokes[0] << " inches)" << std::endl;
     std::cout << "  Rear Right (1): " << lengths[1] << " inches (stroke: " << strokes[1] << " inches)" << std::endl;
     std::cout << "  Front Left (2): " << lengths[2] << " inches (stroke: " << strokes[2] << " inches)" << std::endl;
@@ -427,14 +427,14 @@ int main() {
 
     // Actuator limits
     double minActuatorLength = 0.0;   // Minimum actuator length
-    double maxActuatorLength = 3.0;   // Maximum actuator length (1 inch + 2 inch stroke)
+    double maxActuatorLength = 1000000.0;   // Maximum actuator length (1 inch + 2 inch stroke) was 3, should be 2 inch
 
     // Maximum angles
-    double maxPitchDegrees = 3.18;    // Maximum pitch in degrees
-    double maxRollDegrees = 5.47;     // Maximum roll in degrees
+    double maxPitchDegrees = 90;    // Maximum pitch in degrees     3.18
+    double maxRollDegrees = 90;     // Maximum roll in degrees      5.47
 
     // Set global output precision
-    std::cout << std::fixed << std::setprecision(6);
+    std::cout << std::fixed << std::setprecision(10);
 
     // Create the platform
     Platform platform(width, length, neutralHeight, minActuatorLength, maxActuatorLength,
