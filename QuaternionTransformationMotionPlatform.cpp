@@ -427,11 +427,11 @@ int main() {
 
     // Actuator limits
     double minActuatorLength = 0.0;   // Minimum actuator length
-    double maxActuatorLength = 1000000.0;   // Maximum actuator length (1 inch + 2 inch stroke) was 3, should be 2 inch
+    double maxActuatorLength = 2;   // Maximum actuator length (1 inch + 2 inch stroke) was 3, should be 2 inch
 
     // Maximum angles
-    double maxPitchDegrees = 90;    // Maximum pitch in degrees     3.18
-    double maxRollDegrees = 90;     // Maximum roll in degrees      5.47
+    double maxPitchDegrees = 3.18;    // Maximum pitch in degrees     3.18
+    double maxRollDegrees = 5.47;     // Maximum roll in degrees      5.47
 
     // Set global output precision
     std::cout << std::fixed << std::setprecision(10);
