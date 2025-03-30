@@ -14,6 +14,8 @@
 #include <vector>
 #include <string>
 #include <iomanip> // Add this for precision control
+#include <limits>
+#include <string>
 
  // Define M_PI if not already defined
 #ifndef M_PI
@@ -419,6 +421,28 @@ void printActuatorInfo(const Platform& platform) {
     std::cout << std::endl;
 }
 
+// Function to validate numeric input
+bool validateNumericInput(double& value, const std::string& inputName) {
+    if (std::cin.fail()) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Error: '" << inputName << "' must be a number. Please try again." << std::endl;
+        return false;
+    }
+    return true;
+}
+
+// Function to validate y/n input
+bool validateYesNoInput(char& choice) {
+    std::cin >> choice;
+    if (std::cin.fail() || (choice != 'y' && choice != 'Y' && choice != 'n' && choice != 'N')) {
+        std::cin.clear();
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Error: Please enter 'y' or 'n'. Please try again." << std::endl;
+        return false;
+    }
+    return true;
+}
 int main() {
     // Platform configuration
     double width = 42.0;         // Platform width in inches
@@ -434,7 +458,7 @@ int main() {
     double maxRollDegrees = 5.47;     // Maximum roll in degrees      5.47
 
     // Set global output precision
-    std::cout << std::fixed << std::setprecision(10);
+    std::cout << std::fixed << std::setprecision(2);
 
     // Create the platform
     Platform platform(width, length, neutralHeight, minActuatorLength, maxActuatorLength,
@@ -448,14 +472,30 @@ int main() {
     char choice;
     do {
         double heave, pitch, roll;
+        bool validInput = false;
 
-        std::cout << "Enter transformation:" << std::endl;
-        std::cout << "Heave (inches): ";
-        std::cin >> heave;
-        std::cout << "Pitch (degrees): ";
-        std::cin >> pitch;
-        std::cout << "Roll (degrees): ";
-        std::cin >> roll;
+        // Get and validate heave input
+        do {
+            std::cout << "Heave (inches): ";
+            std::cin >> heave;
+            validInput = validateNumericInput(heave, "heave");
+        } while (!validInput);
+
+        // Get and validate pitch input
+        validInput = false;
+        do {
+            std::cout << "Pitch (degrees): ";
+            std::cin >> pitch;
+            validInput = validateNumericInput(pitch, "pitch");
+        } while (!validInput);
+
+        // Get and validate roll input
+        validInput = false;
+        do {
+            std::cout << "Roll (degrees): ";
+            std::cin >> roll;
+            validInput = validateNumericInput(roll, "roll");
+        } while (!validInput);
 
         // Apply the transformation
         if (platform.applyTransformation(heave, pitch, roll)) {
@@ -466,9 +506,67 @@ int main() {
             std::cout << "Failed to apply transformation." << std::endl;
         }
 
-        std::cout << "Continue? (y/n): ";
-        std::cin >> choice;
+        // Get and validate continue choice
+        validInput = false;
+        do {
+            std::cout << "Continue? (y/n): ";
+            validInput = validateYesNoInput(choice);
+        } while (!validInput);
+
     } while (choice == 'y' || choice == 'Y');
 
     return 0;
 }
+//int main() {
+//    // Platform configuration
+//    double width = 42.0;         // Platform width in inches
+//    double length = 72.0;        // Platform length in inches
+//    double neutralHeight = 1.0;  // Neutral height in inches
+//
+//    // Actuator limits
+//    double minActuatorLength = 0.0;   // Minimum actuator length
+//    double maxActuatorLength = 2;   // Maximum actuator length (1 inch + 2 inch stroke) was 3, should be 2 inch
+//
+//    // Maximum angles
+//    double maxPitchDegrees = 3.18;    // Maximum pitch in degrees     3.18
+//    double maxRollDegrees = 5.47;     // Maximum roll in degrees      5.47
+//
+//    // Set global output precision
+//    std::cout << std::fixed << std::setprecision(10);
+//
+//    // Create the platform
+//    Platform platform(width, length, neutralHeight, minActuatorLength, maxActuatorLength,
+//        maxPitchDegrees, maxRollDegrees);
+//
+//    // Print initial state
+//    std::cout << "Initial Platform State:" << std::endl;
+//    printActuatorInfo(platform);
+//
+//    // Interactive mode
+//    char choice;
+//    do {
+//        double heave, pitch, roll;
+//
+//        std::cout << "Enter transformation:" << std::endl;
+//        std::cout << "Heave (inches): ";
+//        std::cin >> heave;
+//        std::cout << "Pitch (degrees): ";
+//        std::cin >> pitch;
+//        std::cout << "Roll (degrees): ";
+//        std::cin >> roll;
+//
+//        // Apply the transformation
+//        if (platform.applyTransformation(heave, pitch, roll)) {
+//            std::cout << "Transformation applied successfully." << std::endl;
+//            printActuatorInfo(platform);
+//        }
+//        else {
+//            std::cout << "Failed to apply transformation." << std::endl;
+//        }
+//
+//        std::cout << "Continue? (y/n): ";
+//        std::cin >> choice;
+//    } while (choice == 'y' || choice == 'Y');
+//
+//    return 0;
+//}
